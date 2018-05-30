@@ -6,7 +6,7 @@ namespace :puma do
     task :config do
       on roles(fetch(:puma_role)) do |role|
         git_plugin.template_puma 'puma_monit.conf', "#{fetch(:tmp_dir)}/monit.conf", role
-        git_plugin.sudo_if_needed "mv #{fetch(:tmp_dir)}/monit.conf #{fetch(:puma_monit_conf_dir)}"
+        execute "mv #{fetch(:tmp_dir)}/monit.conf #{fetch(:puma_monit_conf_dir)}"
         git_plugin.sudo_if_needed "#{fetch(:puma_monit_bin)} reload"
         # Wait for Monit to be reloaded
         sleep 1
