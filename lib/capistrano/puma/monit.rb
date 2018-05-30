@@ -24,10 +24,7 @@ module Capistrano
       if fetch(:puma_monit_use_sudo)
         backend.sudo command
       else
-        puma_role = fetch(:puma_role)
-        backend.on(puma_role) do
-          backend.execute command
-        end
+        backend.execute command
       end
     end
   end
