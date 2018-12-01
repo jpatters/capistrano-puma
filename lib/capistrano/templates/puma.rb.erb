@@ -41,14 +41,19 @@ on_restart do
   ENV["BUNDLE_GEMFILE"] = "<%= fetch(:bundle_gemfile, "#{current_path}/Gemfile") %>"
 end
 
-<% if puma_preload_app? and fetch(:puma_init_active_record) %>
 before_fork do
+  <% if puma_preload_app? and fetch(:puma_init_active_record) %>
   ActiveRecord::Base.connection_pool.disconnect!
+  <% end %>
 end
 
 on_worker_boot do
+  <% if puma_preload_app? and fetch(:puma_init_active_record) %>
   ActiveSupport.on_load(:active_record) do
     ActiveRecord::Base.establish_connection
   end
+  <% end %>
+  <% if fetch(:puma_init_launch_darkly) %>
+  Rails.configuration.ld_client = Forestry::LDClient.new(<%= fetch(:puma_launch_darkly_sdk_key) %>)
+  <% end %>
 end
-<% end %>
