@@ -54,6 +54,6 @@ on_worker_boot do
   end
   <% end %>
   <% if fetch(:puma_init_launch_darkly) %>
-  Rails.configuration.ld_client = Forestry::Features::LDClient.new(<%= fetch(:puma_launch_darkly_sdk_key) %>)
+  Rails.configuration.x.ld_client ||= Forestry::Features::LDClient.new(<%= fetch(:puma_launch_darkly_sdk_key) %>)
   <% end %>
 end
